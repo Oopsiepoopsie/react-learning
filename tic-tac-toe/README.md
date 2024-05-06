@@ -1,5 +1,7 @@
 # React Tic-Tac-Toe following a tutorial
 
+The Tic-Tac-Toe tutorial is from [the official React Docs Website](https://react.dev/learn/tutorial-tic-tac-toe)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
