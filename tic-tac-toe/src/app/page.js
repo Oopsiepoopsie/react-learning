@@ -1,4 +1,5 @@
 "use client";
+import { Rock_3D } from "next/font/google";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -52,25 +53,51 @@ function Board({ xIsNext, squares, onPlay }) {
     status = "Next player: " + (xIsNext? "X" : "O");
   }
 
+  //declare a square display arrow function (understand how it's different from function statement!)
+  const renderSquare = (i) => {
+    //we need to assign a key prop!
+    return <Square key={i} value={squares[i]} onSquareClick={() => handleClick(i)}/>;
+  }
+
+
+  //use two for loops instead of hardcoding the Square components
+  const board = [];
+  for(let i = 0; i < 3; i++){
+    const squares = [];
+    for(let j=0; j<3; j++){
+      squares.push(renderSquare(3*i + j));
+    }
+    //we need to assign a key prop to the element if it's not hardcoded into the component!!!
+    board.push(<div key={i} className="board-row">{squares}</div>);
+  }
+
+
   return (
     <>
       <div className="status">{status}</div>
-      <div className="board-row">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
+      {board} {/*Here we dereference the variable to its value!*/}
     </>
+
+    // <>
+    //   <div className="status">{status}</div>
+      
+    //   <div className="board-row">
+    //     {/* <Square value={squares[0]} onSquareClick={() => handleClick(0)} /> */}
+    //     {renderSquare(0)}
+    //     {renderSquare(1)}
+    //     {renderSquare(2)}
+    //   </div>
+    //   <div className="board-row">
+    //     {renderSquare(3)}
+    //     {renderSquare(4)}
+    //     {renderSquare(5)}
+    //   </div>
+    //   <div className="board-row">
+    //     {renderSquare(6)}
+    //     {renderSquare(7)}
+    //     {renderSquare(8)}
+    //   </div>
+    // </>
   );
 }
 
