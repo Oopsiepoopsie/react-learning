@@ -101,6 +101,31 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+function Info({ moves }){
+  const [order, setOrder] = useState(true);
+
+  function toggleOrder(){
+    setOrder(!order);
+  }
+
+  // const orderList = [];
+  // if(order){
+  //   //need to assign key prop when building "deynamic" components
+  //   orderList.push(<ol key={order}>{moves}</ol>)
+  // }
+  // else{
+  //   orderList.push(<ol key={order} reversed>{[...moves].reverse()}</ol>)
+  // }
+
+  return (
+    <>
+      {/* {orderList} */}
+      <ol reversed={!order}>{order? moves : [...moves].reverse()}</ol>
+      <button onClick={() => toggleOrder()}>Toggle the Order</button>
+    </>
+  );
+}
+
 export default function Game() {
   //always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand.
   //we figure out xIsNext based on currentMove
@@ -171,7 +196,7 @@ export default function Game() {
         />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <Info moves = {moves} />
       </div>
     </div>
   );
