@@ -115,13 +115,23 @@ export default function Game() {
       description = 'Go to game start';
     }
 
-    return(
-      //It’s strongly recommended that you assign proper keys 
-      //whenever you build "dynamic" lists!!!
-      <li key={move}>
-          <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
+    if(move == history.length - 1){
+      //show "You are at move #" instead of a button
+      return(
+        <li key={move}>
+          <p>You are at move #{move}</p>
+        </li>
+      )
+    }
+    else{
+      return(
+        //It’s strongly recommended that you assign proper keys 
+        //whenever you build "dynamic" lists!!!
+        <li key={move}>
+            <button onClick={() => jumpTo(move)}>{description}</button>
+        </li>
+      );
+    }
   });
 
   return (
