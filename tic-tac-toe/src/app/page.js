@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useState } from "react";
 
 
-function Square({ value, onSquareClick }){
+function Square({ value, onSquareClick, squareClass }){
   return(
     <button 
       onClick={onSquareClick}
-      className="square"
+      className={squareClass}
     >
       {value}
     </button>
@@ -44,28 +44,36 @@ function Board({ xIsNext, squares, onPlay }) {
     // setXIsNext(!xIsNext); 
   }
 
+  //declare a square display function (understand the difference between function expression and arrow function!)
+  function renderSquare(i, squareClass){
+    //we need to assign a key prop!
+    return <Square squareClass={squareClass} key={i} value={squares[i]} onSquareClick={() => handleClick(i)}/>;
+  }
+
+  //the return value is the winning three positions
   const winner = calculateWinner(squares);
+  //set the status of the game
   let status;
   if(winner){
-    status = "Winner: " + winner;
+    status = "Winner: " + squares[winner[0]];
+  }
+  else if(!squares.includes(null)){
+    status = "It is a DRAW!";
   }
   else{
     status = "Next player: " + (xIsNext? "X" : "O");
   }
-
-  //declare a square display arrow function (understand how it's different from function statement!)
-  const renderSquare = (i) => {
-    //we need to assign a key prop!
-    return <Square key={i} value={squares[i]} onSquareClick={() => handleClick(i)}/>;
-  }
-
 
   //use two for loops instead of hardcoding the Square components
   const board = [];
   for(let i = 0; i < 3; i++){
     const squares = [];
     for(let j=0; j<3; j++){
-      squares.push(renderSquare(3*i + j));
+      //push the Square component
+      if(winner && winner.includes(3*i+j))
+        squares.push(renderSquare(3*i + j, "square-highlight"));
+      else
+        squares.push(renderSquare(3*i + j, "square"));
     }
     //we need to assign a key prop to the element if it's not hardcoded into the component!!!
     board.push(<div key={i} className="board-row">{squares}</div>);
@@ -220,7 +228,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return [a, b, c];
     }
   }
   return null;
