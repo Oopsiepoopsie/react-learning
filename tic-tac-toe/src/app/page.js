@@ -36,6 +36,9 @@ function Board({ xIsNext, squares, onPlay }) {
       nextSquares[i] = "O";
     }
 
+    //record the recent move as the last element
+    nextSquares[9] = i;
+
     //the reason why we need a new copy is because of the immutability of state variable
     //it won't re-render if the data(address value) hasn't changed!!!
     // setSquares(nextSquares);  // pass in the array "address" value
@@ -138,7 +141,7 @@ export default function Game() {
   //always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand.
   //we figure out xIsNext based on currentMove
   // const [xIsNext, setXIsNext] = useState(true);
-  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [history, setHistory] = useState([Array(10).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;    //if currMove is even it should be X, and O otherwise
   const currentSquares = history[currentMove];
@@ -165,21 +168,30 @@ export default function Game() {
   //squares go through the values(arrays) and move goes through the index
   //(In most cases, you’d need the actual array elements, but to render a list of moves you will only need indexes.)
   //in this case we only need the indexes to render which move to go back to
-  const moves = history.map((squares, move) => {
+  const moves = history.map((square, move) => {
     let description;
 
     if(move > 0){
-      description = 'Go to move #' + move;
+      //display the row and column as (row, column)
+      description = 'Go to move #' + move + ' ' + `(${Math.floor(square[9]/3) + 1}, ${square[9]%3 + 1})`;
     }
     else{
       description = 'Go to game start';
     }
 
-    if(move == history.length - 1){
+    if(history.length == 1){
+      //the start of the game when only one array
+      return(
+        <li key={move}>
+          <p>{description}</p>
+        </li>
+      )
+    }
+    else if(move == history.length - 1){
       //show "You are at move #" instead of a button
       return(
         <li key={move}>
-          <p>You are at move #{move}</p>
+          <p>You are at move #{move} {`(${Math.floor(square[9]/3) + 1}, ${square[9]%3 + 1})`}</p>
         </li>
       )
     }
